@@ -1,0 +1,55 @@
+<script>
+    (async () => {
+        function waitForEl(selector) {
+            return new Promise(resolve => {
+                if (document.querySelector(selector)) {
+                    return resolve(document.querySelector(selector));
+                }
+
+                const observer = new MutationObserver(mutations => {
+                    if (document.querySelector(selector)) {
+                        resolve(document.querySelector(selector));
+                        observer.disconnect();
+                    }
+                });
+
+                observer.observe(document, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
+
+        if (window.location.pathname === '/') {
+            const mainMenuHome = await waitForEl('#main-menu > li:first-of-type')
+            mainMenuHome.classList.add("current")
+        }
+    })()
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+
+<style>
+    body,
+    .article-content {
+        font-family: 'Noto Serif SC', serif;
+    }
+
+    .article-content {
+        text-align: justify;
+    }
+
+    .article-subtitle {
+        font-size: unset;
+    }
+
+    .article-list--compact .article-image img {
+        border-radius: 10px;
+    }
+
+    .article-list article .article-image img {
+        height: unset;
+    }
+</style>
