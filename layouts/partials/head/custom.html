@@ -32,9 +32,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
 
 <style>
-    body,
-    .article-content {
-        font-family: 'Noto Serif SC', serif;
+    :root[data-scheme=light] {
+        --body-background: rgb(241, 242, 243);
+    }
+
+    :root {
+        --zh-font-family: 'Noto Serif SC', serif;
     }
 
     .article-content {
