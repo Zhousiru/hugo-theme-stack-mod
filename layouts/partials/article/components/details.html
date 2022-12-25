@@ -11,16 +11,8 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="{{ .RelPermalink }}">
-                {{- .Title -}}
-            </a>
+            {{- .Title -}}
         </h2>
-    
-        {{ with .Params.description }}
-        <h3 class="article-subtitle">
-            {{ . }}
-        </h3>
-        {{ end }}
     </div>
 
     {{ $showReadingTime := .Params.readingTime | default (.Site.Params.article.readingTime) }}
