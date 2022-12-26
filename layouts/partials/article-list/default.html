@@ -47,10 +47,11 @@
                         {{- .Title -}}
                     </a>
                 </h2>
-        
+                {{ if .Summary }}
                 <h3 class="article-subtitle">
-                    {{ partialCached "data/description" . .RelPermalink }}
+                    {{ .Summary }}
                 </h3>
+                {{ end }}
             </div>
         
             {{ $showReadingTime := .Params.readingTime | default (.Site.Params.article.readingTime) }}
