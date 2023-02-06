@@ -22,10 +22,21 @@
     }
 
     .article-list--compact .article-image img {
-        border-radius: 10px;
+        border-radius: var(--card-border-radius);
     }
 
     .article-list article .article-image img {
         height: unset;
+    }
+
+    .right-sidebar.sticky {
+        overflow-y: scroll;
+        max-height: 100vh;
+        padding-bottom: calc(var(--widget-separation) / 2);
+    }
+
+    .right-sidebar.sticky::-webkit-scrollbar {
+        width: 0;
+        background-color: transparent;
     }
 </style>
