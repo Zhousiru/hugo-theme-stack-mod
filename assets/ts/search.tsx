@@ -327,7 +327,7 @@ const loadSearch = () =>
         });
     }, 0);
 
-document.addEventListener('DOMContentLoaded', loadSearch);
+window.addEventListener('load', loadSearch);
 document.addEventListener('pjax:content', loadSearch);
 
 export default Search;

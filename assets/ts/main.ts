@@ -100,8 +100,8 @@ const loadStack = () =>
         Stack.init();
     }, 0);
 
-document.addEventListener('DOMContentLoaded', loadStack);
-document.addEventListener('pjax:content', loadStack);
+window.addEventListener('load', loadStack);
+document.addEventListener('pjax:ready', loadStack);
 
 declare global {
     interface Window {

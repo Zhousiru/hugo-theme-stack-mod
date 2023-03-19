@@ -1,7 +1,7 @@
 declare global {
     interface Window {
         PhotoSwipe: any;
-        PhotoSwipeUI_Default: any
+        PhotoSwipeUI_Default: any;
     }
 }
 
@@ -20,7 +20,7 @@ class StackGallery {
 
     constructor(container: HTMLElement, galleryUID = 1) {
         if (window.PhotoSwipe == undefined || window.PhotoSwipeUI_Default == undefined) {
-            console.error("PhotoSwipe lib not loaded.");
+            console.error('PhotoSwipe lib not loaded.');
             return;
         }
 
@@ -45,8 +45,8 @@ class StackGallery {
                 h: parseInt(img.getAttribute('height')),
                 src: img.src,
                 msrc: img.getAttribute('data-thumb') || img.src,
-                el: el
-            }
+                el: el,
+            };
 
             if (figcaption) {
                 aux.title = figcaption.innerHTML;
@@ -119,12 +119,10 @@ class StackGallery {
             if (!currentGallery.length) {
                 /// First iteration
                 currentGallery = [figure];
-            }
-            else if (figure.previousElementSibling === currentGallery[currentGallery.length - 1]) {
+            } else if (figure.previousElementSibling === currentGallery[currentGallery.length - 1]) {
                 /// Adjacent figures
                 currentGallery.push(figure);
-            }
-            else if (currentGallery.length) {
+            } else if (currentGallery.length) {
                 /// End gallery
                 StackGallery.wrap(currentGallery);
                 currentGallery = [figure];
@@ -138,7 +136,7 @@ class StackGallery {
 
     /**
      * Wrap adjacent figure tags with div.gallery
-     * @param figures 
+     * @param figures
      */
     public static wrap(figures: HTMLElement[]) {
         const galleryContainer = document.createElement('div');
@@ -147,7 +145,7 @@ class StackGallery {
         const parentNode = figures[0].parentNode,
             first = figures[0];
 
-        parentNode.insertBefore(galleryContainer, first)
+        parentNode.insertBefore(galleryContainer, first);
 
         for (const figure of figures) {
             galleryContainer.appendChild(figure);
@@ -165,7 +163,7 @@ class StackGallery {
                     rect = thumbnail.getBoundingClientRect();
 
                 return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
-            }
+            },
         });
 
         ps.init();
@@ -178,7 +176,7 @@ class StackGallery {
             a.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.open(index);
-            })
+            });
         }
     }
 }
