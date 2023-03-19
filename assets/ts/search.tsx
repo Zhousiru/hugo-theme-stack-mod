@@ -1,16 +1,16 @@
 interface pageData {
-    title: string,
-    date: string,
-    permalink: string,
-    content: string,
-    image?: string,
-    preview: string,
-    matchCount: number
+    title: string;
+    date: string;
+    permalink: string;
+    content: string;
+    image?: string;
+    preview: string;
+    matchCount: number;
 }
 
 interface match {
-    start: number,
-    end: number
+    start: number;
+    end: number;
 }
 
 /**
@@ -23,7 +23,7 @@ const tagsToReplace = {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    '…': '&hellip;'
+    '…': '&hellip;',
 };
 
 function replaceTag(tag) {
@@ -88,8 +88,7 @@ class Search {
                 resultArray.push(`${replaceHTMLEnt(str.substring(lastIndex, lastIndex + offset))} [...] `);
                 resultArray.push(`${replaceHTMLEnt(str.substring(item.start - offset, item.start))}`);
                 charCount += offset * 2;
-            }
-            else {
+            } else {
                 /// If the match is too close to the end of last match, don't add ellipsis
                 resultArray.push(replaceHTMLEnt(str.substring(lastIndex, item.start)));
                 charCount += item.start - lastIndex;
@@ -133,10 +132,15 @@ class Search {
         const rawData = await this.getData();
         const results: pageData[] = [];
 
-        const regex = new RegExp(keywords.filter((v, index, arr) => {
-            arr[index] = escapeRegExp(v);
-            return v.trim() !== '';
-        }).join('|'), 'gi');
+        const regex = new RegExp(
+            keywords
+                .filter((v, index, arr) => {
+                    arr[index] = escapeRegExp(v);
+                    return v.trim() !== '';
+                })
+                .join('|'),
+            'gi'
+        );
 
         for (const item of rawData) {
             const titleMatches: match[] = [],
@@ -145,14 +149,14 @@ class Search {
             let result = {
                 ...item,
                 preview: '',
-                matchCount: 0
-            }
+                matchCount: 0,
+            };
 
             const contentMatchAll = item.content.matchAll(regex);
             for (const match of Array.from(contentMatchAll)) {
                 contentMatches.push({
                     start: match.index,
-                    end: match.index + match[0].length
+                    end: match.index + match[0].length,
                 });
             }
 
@@ -160,15 +164,14 @@ class Search {
             for (const match of Array.from(titleMatchAll)) {
                 titleMatches.push({
                     start: match.index,
-                    end: match.index + match[0].length
+                    end: match.index + match[0].length,
                 });
             }
 
             if (titleMatches.length > 0) result.title = Search.processMatches(result.title, titleMatches, false);
             if (contentMatches.length > 0) {
                 result.preview = Search.processMatches(result.content, contentMatches);
-            }
-            else {
+            } else {
                 /// If there are no matches in the content, use the first 140 characters as preview
                 result.preview = replaceHTMLEnt(result.content.substring(0, 140));
             }
@@ -199,14 +202,14 @@ class Search {
     }
 
     private generateResultTitle(resultLen, time) {
-        return this.resultTitleTemplate.replace("#PAGES_COUNT", resultLen).replace("#TIME_SECONDS", time);
+        return this.resultTitleTemplate.replace('#PAGES_COUNT', resultLen).replace('#TIME_SECONDS', time);
     }
 
     public async getData() {
         if (!this.data) {
             /// Not fetched yet
             const jsonURL = this.form.dataset.json;
-            this.data = await fetch(jsonURL).then(res => res.json());
+            this.data = await fetch(jsonURL).then((res) => res.json());
             const parser = new DOMParser();
 
             for (const item of this.data) {
@@ -234,7 +237,7 @@ class Search {
             lastSearch = keywords;
 
             this.doSearch(keywords.split(' '));
-        }
+        };
 
         this.input.addEventListener('input', eventHandler);
         this.input.addEventListener('compositionend', eventHandler);
@@ -247,8 +250,8 @@ class Search {
 
     private bindQueryStringChange() {
         window.addEventListener('popstate', (e) => {
-            this.handleQueryString()
-        })
+            this.handleQueryString();
+        });
     }
 
     private handleQueryString() {
@@ -258,9 +261,8 @@ class Search {
 
         if (keywords) {
             this.doSearch(keywords.split(' '));
-        }
-        else {
-            this.clear()
+        } else {
+            this.clear();
         }
     }
 
@@ -268,34 +270,34 @@ class Search {
         const pageURL = new URL(window.location.toString());
 
         if (keywords === '') {
-            pageURL.searchParams.delete('keyword')
-        }
-        else {
+            pageURL.searchParams.delete('keyword');
+        } else {
             pageURL.searchParams.set('keyword', keywords);
         }
 
         if (replaceState) {
             window.history.replaceState('', '', pageURL.toString());
-        }
-        else {
+        } else {
             window.history.pushState('', '', pageURL.toString());
         }
     }
 
     public static render(item: pageData) {
-        return <article>
-            <a href={item.permalink}>
-                <div class="article-details">
-                    <h2 class="article-title" dangerouslySetInnerHTML={{ __html: item.title }}></h2>
-                    <section class="article-preview" dangerouslySetInnerHTML={{ __html: item.preview }}></section>
-                </div>
-                {item.image &&
-                    <div class="article-image">
-                        <img src={item.image} loading="lazy" />
+        return (
+            <article>
+                <a href={item.permalink}>
+                    <div class="article-details">
+                        <h2 class="article-title" dangerouslySetInnerHTML={{ __html: item.title }}></h2>
+                        <section class="article-preview" dangerouslySetInnerHTML={{ __html: item.preview }}></section>
                     </div>
-                }
-            </a>
-        </article>;
+                    {item.image && (
+                        <div class="article-image">
+                            <img src={item.image} loading="lazy" />
+                        </div>
+                    )}
+                </a>
+            </article>
+        );
     }
 }
 
@@ -305,8 +307,12 @@ declare global {
     }
 }
 
-window.addEventListener('load', () => {
+const loadSearch = () =>
     setTimeout(function () {
+        if (window.location.pathname !== '/search/') {
+            return;
+        }
+
         const searchForm = document.querySelector('.search-form') as HTMLFormElement,
             searchInput = searchForm.querySelector('input') as HTMLInputElement,
             searchResultList = document.querySelector('.search-result--list') as HTMLDivElement,
@@ -317,9 +323,11 @@ window.addEventListener('load', () => {
             input: searchInput,
             list: searchResultList,
             resultTitle: searchResultTitle,
-            resultTitleTemplate: window.searchResultTitleTemplate
+            resultTitleTemplate: window.searchResultTitleTemplate,
         });
     }, 0);
-})
+
+document.addEventListener('DOMContentLoaded', loadSearch);
+document.addEventListener('pjax:content', loadSearch);
 
 export default Search;
