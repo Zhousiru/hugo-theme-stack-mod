@@ -1,17 +1,17 @@
 /*!
-*   Hugo Theme Stack
-*
-*   @author: Jimmy Cai
-*   @website: https://jimmycai.com
-*   @link: https://github.com/CaiJimmy/hugo-theme-stack
-*/
-import StackGallery from "ts/gallery";
+ *   Hugo Theme Stack
+ *
+ *   @author: Jimmy Cai
+ *   @website: https://jimmycai.com
+ *   @link: https://github.com/CaiJimmy/hugo-theme-stack
+ */
+import StackGallery from 'ts/gallery';
 import { getColor } from 'ts/color';
 import menu from 'ts/menu';
 import createElement from 'ts/createElement';
 import StackColorScheme from 'ts/colorScheme';
 import { setupScrollspy } from 'ts/scrollspy';
-import { setupSmoothAnchors } from "ts/smoothAnchors";
+import { setupSmoothAnchors } from 'ts/smoothAnchors';
 
 let Stack = {
     init: () => {
@@ -33,12 +33,12 @@ let Stack = {
         const articleTile = document.querySelector('.article-list--tile');
         if (articleTile) {
             let observer = new IntersectionObserver(async (entries, observer) => {
-                entries.forEach(entry => {
+                entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
                     observer.unobserve(entry.target);
 
                     const articles = entry.target.querySelectorAll('article.has-image');
-                    articles.forEach(async articles => {
+                    articles.forEach(async (articles) => {
                         const image = articles.querySelector('img'),
                             imageURL = image.src,
                             key = image.getAttribute('data-key'),
@@ -51,22 +51,21 @@ let Stack = {
                         linear-gradient(0deg, 
                             rgba(${colors.DarkMuted.rgb[0]}, ${colors.DarkMuted.rgb[1]}, ${colors.DarkMuted.rgb[2]}, 0.5) 0%, 
                             rgba(${colors.Vibrant.rgb[0]}, ${colors.Vibrant.rgb[1]}, ${colors.Vibrant.rgb[2]}, 0.75) 100%)`;
-                    })
-                })
+                    });
+                });
             });
 
-            observer.observe(articleTile)
+            observer.observe(articleTile);
         }
-
 
         /**
          * Add copy button to code block
-        */
+         */
         const highlights = document.querySelectorAll('.article-content div.highlight');
         const copyText = `Copy`,
             copiedText = `Copied!`;
 
-        highlights.forEach(highlight => {
+        highlights.forEach((highlight) => {
             const copyButton = document.createElement('button');
             copyButton.innerHTML = copyText;
             copyButton.classList.add('copyCodeButton');
@@ -76,7 +75,8 @@ let Stack = {
             if (!codeBlock) return;
 
             copyButton.addEventListener('click', () => {
-                navigator.clipboard.writeText(codeBlock.textContent)
+                navigator.clipboard
+                    .writeText(codeBlock.textContent)
                     .then(() => {
                         copyButton.textContent = copiedText;
 
@@ -84,27 +84,29 @@ let Stack = {
                             copyButton.textContent = copyText;
                         }, 1000);
                     })
-                    .catch(err => {
-                        alert(err)
+                    .catch((err) => {
+                        alert(err);
                         console.log('Something went wrong', err);
                     });
             });
         });
 
         new StackColorScheme(document.getElementById('dark-mode-toggle'));
-    }
-}
+    },
+};
 
-window.addEventListener('load', () => {
+const loadStack = () =>
     setTimeout(function () {
         Stack.init();
     }, 0);
-})
+
+document.addEventListener('DOMContentLoaded', loadStack);
+document.addEventListener('pjax:content', loadStack);
 
 declare global {
     interface Window {
         createElement: any;
-        Stack: any
+        Stack: any;
     }
 }
 
