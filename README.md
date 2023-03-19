@@ -1,3 +1,26 @@
+# Hugo Theme Stack Mod
+
+Just a modded Stack theme.
+
+## Features
+
+- 撷取 `<!--more-->` 标签前的文段作为 Summary，避免重复显示 Summary
+- 改进文章页中的标题和封面图，使其不可点击跳转
+- 根据个人喜好修改了字体
+- 给文章页标题加上了站点标题
+- 当右栏过长时，可以滚动
+- 添加了 PJAX
+
+## Preview
+
+[pooi.me](https://pooi.me)
+
+<br>
+
+*Raw `README.md` Below*
+
+---
+
 ![image](https://user-images.githubusercontent.com/5889006/190859441-141b5f81-8483-40d2-bd96-ebf85616a46d.png)
 
 # Hugo Theme Stack
