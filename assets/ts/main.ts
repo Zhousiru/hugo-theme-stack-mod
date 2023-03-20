@@ -5,7 +5,6 @@
  *   @website: https://jimmycai.com
  *   @link: https://github.com/CaiJimmy/hugo-theme-stack
  */
-import StackGallery from 'ts/gallery';
 import { getColor } from 'ts/color';
 import menu from 'ts/menu';
 import createElement from 'ts/createElement';
@@ -22,7 +21,26 @@ let Stack = {
 
         const articleContent = document.querySelector('.article-content') as HTMLElement;
         if (articleContent) {
-            new StackGallery(articleContent);
+            const lightbox = new PhotoSwipeLightbox({
+                gallery: articleContent,
+                children: 'img',
+
+                pswpModule: () => PhotoSwipe,
+            });
+            lightbox.addFilter('domItemData', (itemData, element) => {
+                itemData.src = element.src;
+                itemData.msrc = element.currentSrc;
+                itemData.srcset = element.srcset;
+                itemData.w = element.dataset.width ?? element.naturalWidth;
+                itemData.h = element.dataset.height ?? element.naturalHeight;
+
+                return itemData;
+            });
+            new PhotoSwipeDynamicCaption(lightbox, {
+                captionContent: (slide) => slide.data.element.alt,
+            });
+            lightbox.init();
+
             setupSmoothAnchors();
             setupScrollspy();
         }

@@ -6,10 +6,15 @@ Just a modded Stack theme.
 
 - 撷取 `<!--more-->` 标签前的文段作为 Summary，避免重复显示 Summary
 - 改进文章页中的标题和封面图，使其不可点击跳转
-- 根据个人喜好修改了字体
+- 根据个人喜好修改了字体和一些样式
+  - `accent-color`，间距，封面图不定高等
 - 给文章页标题加上了站点标题
 - 当右栏过长时，可以滚动
 - 添加了 PJAX
+- 更新 PhotoSwipe 到 v5.3.6，顺便修复了进入文章页面 PhotoSwipe 一闪而过的问题
+  - 添加了对外链图片的 PhotoSwipe 支持
+  - 图片的 `alt` 作为 PhotoSwipe Caption
+  - 仍 WIP，目前勉强能用
 
 ## Preview
 

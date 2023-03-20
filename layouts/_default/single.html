@@ -38,7 +38,7 @@
 
     {{ partialCached "footer/footer" . }}
 
-    {{ partialCached "article/components/photoswipe" . }}
+    {{- partial "helper/external" (dict "Context" . "Namespace" "PhotoSwipe") -}}
 {{ end }}
 
 {{ define "right-sidebar" }}
