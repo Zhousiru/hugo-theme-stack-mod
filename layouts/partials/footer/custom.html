@@ -1,0 +1,26 @@
+<script src="https://unpkg.com/swup@3/dist/Swup.umd.js"></script>
+<script src="https://unpkg.com/@swup/body-class-plugin@2/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@swup/forms-plugin@2/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@swup/head-plugin@1/dist/SwupHeadPlugin.min.js"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@2/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@2/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@swup/scroll-plugin@2/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@swup/scripts-plugin@1/dist/SwupScriptsPlugin.min.js"></script>
+<script>
+    const swup = new Swup({
+        containers: ['.container.main-container'],
+        plugins: [
+            new SwupBodyClassPlugin(),
+            new SwupFormsPlugin({
+                formSelector: 'form.search-form',
+            }),
+            new SwupHeadPlugin({ persistTags: 'link[data-keep]' }),
+            new SwupPreloadPlugin(),
+            new SwupProgressPlugin({ delay: 200, hideImmediately: false }),
+            new SwupScrollPlugin({
+                animateScroll: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+            }),
+            new SwupScriptsPlugin({ optin: true }),
+        ],
+    });
+</script>

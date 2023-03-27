@@ -21,25 +21,43 @@ let Stack = {
 
         const articleContent = document.querySelector('.article-content') as HTMLElement;
         if (articleContent) {
-            const lightbox = new PhotoSwipeLightbox({
-                gallery: articleContent,
-                children: 'img',
+            const setupLightbox = () => {
+                const lightbox = new PhotoSwipeLightbox({
+                    gallery: articleContent,
+                    children: 'img',
 
-                pswpModule: () => PhotoSwipe,
-            });
-            lightbox.addFilter('domItemData', (itemData, element) => {
-                itemData.src = element.src;
-                itemData.msrc = element.currentSrc;
-                itemData.srcset = element.srcset;
-                itemData.w = element.dataset.width ?? element.naturalWidth;
-                itemData.h = element.dataset.height ?? element.naturalHeight;
+                    pswpModule: () => PhotoSwipe,
+                });
+                lightbox.addFilter('domItemData', (itemData, element) => {
+                    itemData.src = element.src;
+                    itemData.msrc = element.currentSrc;
+                    itemData.srcset = element.srcset;
+                    itemData.w = element.dataset.width ?? element.naturalWidth;
+                    itemData.h = element.dataset.height ?? element.naturalHeight;
 
-                return itemData;
-            });
-            new PhotoSwipeDynamicCaption(lightbox, {
-                captionContent: (slide) => slide.data.element.alt,
-            });
-            lightbox.init();
+                    return itemData;
+                });
+                new PhotoSwipeDynamicCaption(lightbox, {
+                    captionContent: (slide) => slide.data.element.alt,
+                });
+                lightbox.init();
+            };
+
+            if (window.PhotoSwipeLightbox && window.PhotoSwipeDynamicCaption) {
+                setupLightbox();
+            } else {
+                let psScript = document.querySelectorAll('.ps-script') as NodeListOf<HTMLScriptElement>;
+                const promiseList: Array<Promise<void>> = [];
+
+                psScript.forEach((el) => {
+                    const promise = new Promise<void>((resolve, reject) => {
+                        el.addEventListener('load', () => resolve());
+                    });
+                    promiseList.push(promise);
+                });
+
+                Promise.all(promiseList).then(setupLightbox);
+            }
 
             setupSmoothAnchors();
             setupScrollspy();
@@ -119,7 +137,7 @@ const loadStack = () =>
     }, 0);
 
 window.addEventListener('load', loadStack);
-document.addEventListener('pjax:ready', loadStack);
+document.addEventListener('swup:pageView', loadStack);
 
 declare global {
     interface Window {

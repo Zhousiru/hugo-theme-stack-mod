@@ -67,7 +67,13 @@ class Search {
      * @param offset how many characters before and after the match to include in preview
      * @returns preview string
      */
-    private static processMatches(str: string, matches: match[], ellipsis: boolean = true, charLimit = 140, offset = 20): string {
+    private static processMatches(
+        str: string,
+        matches: match[],
+        ellipsis: boolean = true,
+        charLimit = 140,
+        offset = 20
+    ): string {
         matches.sort((a, b) => {
             return a.start - b.start;
         });
@@ -198,7 +204,10 @@ class Search {
 
         const endTime = performance.now();
 
-        this.resultTitle.innerText = this.generateResultTitle(results.length, ((endTime - startTime) / 1000).toPrecision(1));
+        this.resultTitle.innerText = this.generateResultTitle(
+            results.length,
+            ((endTime - startTime) / 1000).toPrecision(1)
+        );
     }
 
     private generateResultTitle(resultLen, time) {
@@ -328,6 +337,6 @@ const loadSearch = () =>
     }, 0);
 
 window.addEventListener('load', loadSearch);
-document.addEventListener('pjax:content', loadSearch);
+document.addEventListener('swup:contentReplaced', loadSearch);
 
 export default Search;

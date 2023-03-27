@@ -5,17 +5,17 @@ Vibrant:
 
 PhotoSwipe:
     - src: https://cdn.jsdelivr.net/npm/photoswipe@5.3.6/dist/umd/photoswipe-lightbox.umd.min.js
-      integrity: 
+      class: ps-script
       type: script
       defer: true
 
     - src: https://cdn.jsdelivr.net/npm/photoswipe@5.3.6/dist/umd/photoswipe.umd.min.js
-      integrity: 
+      class: ps-script
       type: script
       defer: true
 
     - src: https://cdn.jsdelivr.net/npm/photoswipe-dynamic-caption-plugin@1.2.7/dist/photoswipe-dynamic-caption-plugin.umd.min.js
-      integrity: 
+      class: ps-script
       type: script
       defer: true
 

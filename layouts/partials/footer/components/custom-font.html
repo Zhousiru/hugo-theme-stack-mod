@@ -1,18 +1,19 @@
 <script>
     (function () {
         const fonts = [
-            "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",
-            "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700&display=swap",
+            'https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700&display=swap',
         ];
 
-        fonts.forEach(url => {
+        fonts.forEach((url) => {
             const customFont = document.createElement('link');
             customFont.href = url;
 
-            customFont.type = "text/css";
-            customFont.rel = "stylesheet";
+            customFont.type = 'text/css';
+            customFont.rel = 'stylesheet';
+            customFont.dataset.keep = '';
 
             document.head.appendChild(customFont);
         });
-    }());
+    })();
 </script>

@@ -54,38 +54,19 @@
     }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/pjax-api@v3.38.1"></script>
-<script>
-    const { Pjax } = window['pjax-api'];
-
-    const pjax = new Pjax({
-        areas: ['body'],
-    });
-</script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" />
 <style>
-    #nprogress .bar {
-        background: #6eb49b;
+    .transition-fade {
+        transition: 0.1s;
+        opacity: 1;
     }
-    #nprogress .peg {
-        box-shadow: 0 0 10px #6eb49b, 0 0 5px #6eb49b;
+
+    html.is-animating .transition-fade {
+        opacity: 0.6;
     }
-    #nprogress .spinner-icon {
-        border-top-color: #6eb49b;
-        border-left-color: #6eb49b;
+
+    .swup-progress-bar {
+        height: 1px;
+        background-color: #6eb49b;
+        transition: all 0.4s;
     }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
-<script>
-    NProgress.configure({ showSpinner: false });
-
-    window.addEventListener('load', () => {
-        NProgress.done();
-
-        window.addEventListener('pjax:fetch', NProgress.start);
-        document.addEventListener('pjax:ready', NProgress.done);
-    });
-
-    document.addEventListener('DOMContentLoaded', NProgress.start);
-</script>
