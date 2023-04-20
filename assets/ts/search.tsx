@@ -54,7 +54,6 @@ class Search {
         this.resultTitleTemplate = resultTitleTemplate;
 
         this.handleQueryString();
-        this.bindQueryStringChange();
         this.bindSearchForm();
     }
 
@@ -257,12 +256,6 @@ class Search {
         this.resultTitle.innerText = '';
     }
 
-    private bindQueryStringChange() {
-        window.addEventListener('popstate', (e) => {
-            this.handleQueryString();
-        });
-    }
-
     private handleQueryString() {
         const pageURL = new URL(window.location.toString());
         const keywords = pageURL.searchParams.get('keyword');
@@ -336,7 +329,9 @@ const loadSearch = () =>
         });
     }, 0);
 
-window.addEventListener('load', loadSearch);
-document.addEventListener('swup:contentReplaced', loadSearch);
+window.addEventListener('load', () => {
+    loadSearch();
+    document.addEventListener('swup:contentReplaced', loadSearch);
+});
 
 export default Search;

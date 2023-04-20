@@ -136,8 +136,10 @@ const loadStack = () =>
         Stack.init();
     }, 0);
 
-window.addEventListener('load', loadStack);
-document.addEventListener('swup:pageView', loadStack);
+window.addEventListener('load', () => {
+    loadStack();
+    document.addEventListener('swup:pageView', loadStack);
+});
 
 declare global {
     interface Window {

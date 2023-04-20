@@ -9,21 +9,23 @@ function debounced(func: Function) {
         }
 
         timeout = window.requestAnimationFrame(() => func());
-    }
+    };
 }
 
-const headersQuery = ".article-content h1[id], .article-content h2[id], .article-content h3[id], .article-content h4[id], .article-content h5[id], .article-content h6[id]";
-const tocQuery = "#TableOfContents";
-const navigationQuery = "#TableOfContents li";
-const activeClass = "active-class";
+const headersQuery =
+    '.article-content h1[id], .article-content h2[id], .article-content h3[id], .article-content h4[id], .article-content h5[id], .article-content h6[id]';
+const tocQuery = '#TableOfContents';
+const navigationQuery = '#TableOfContents li';
+const activeClass = 'active-class';
 
 function scrollToTocElement(tocElement: HTMLElement, scrollableNavigation: HTMLElement) {
-    let textHeight = tocElement.querySelector("a").offsetHeight;
-    let scrollTop = tocElement.offsetTop - scrollableNavigation.offsetHeight / 2 + textHeight / 2 - scrollableNavigation.offsetTop;
+    let textHeight = tocElement.querySelector('a').offsetHeight;
+    let scrollTop =
+        tocElement.offsetTop - scrollableNavigation.offsetHeight / 2 + textHeight / 2 - scrollableNavigation.offsetTop;
     if (scrollTop < 0) {
         scrollTop = 0;
     }
-    scrollableNavigation.scrollTo({ top: scrollTop, behavior: "smooth" });
+    scrollableNavigation.scrollTo({ top: scrollTop, behavior: 'smooth' });
 }
 
 type IdToElementMap = { [key: string]: HTMLElement };
@@ -31,9 +33,9 @@ type IdToElementMap = { [key: string]: HTMLElement };
 function buildIdToNavigationElementMap(navigation: NodeListOf<Element>): IdToElementMap {
     const sectionLinkRef: IdToElementMap = {};
     navigation.forEach((navigationElement: HTMLElement) => {
-        const link = navigationElement.querySelector("a");
-        const href = link.getAttribute("href");
-        if (href.startsWith("#")) {
+        const link = navigationElement.querySelector('a');
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
             sectionLinkRef[href.slice(1)] = navigationElement;
         }
     });
@@ -43,7 +45,9 @@ function buildIdToNavigationElementMap(navigation: NodeListOf<Element>): IdToEle
 
 function computeOffsets(headers: NodeListOf<Element>) {
     let sectionsOffsets = [];
-    headers.forEach((header: HTMLElement) => { sectionsOffsets.push({ id: header.id, offset: header.offsetTop }) });
+    headers.forEach((header: HTMLElement) => {
+        sectionsOffsets.push({ id: header.id, offset: header.offsetTop });
+    });
     sectionsOffsets.sort((a, b) => a.offset - b.offset);
     return sectionsOffsets;
 }
@@ -51,19 +55,19 @@ function computeOffsets(headers: NodeListOf<Element>) {
 function setupScrollspy() {
     let headers = document.querySelectorAll(headersQuery);
     if (!headers) {
-        console.warn("No header matched query", headers);
+        console.warn('No header matched query', headers);
         return;
     }
 
     let scrollableNavigation = document.querySelector(tocQuery) as HTMLElement | undefined;
     if (!scrollableNavigation) {
-        console.warn("No toc matched query", tocQuery);
+        console.warn('No toc matched query', tocQuery);
         return;
     }
 
     let navigation = document.querySelectorAll(navigationQuery);
     if (!navigation) {
-        console.warn("No navigation matched query", navigationQuery);
+        console.warn('No navigation matched query', navigationQuery);
         return;
     }
 
@@ -72,8 +76,14 @@ function setupScrollspy() {
     // We need to avoid scrolling when the user is actively interacting with the ToC. Otherwise, if the user clicks on a link in the ToC,
     // we would scroll their view, which is not optimal usability-wise.
     let tocHovered: boolean = false;
-    scrollableNavigation.addEventListener("mouseenter", debounced(() => tocHovered = true));
-    scrollableNavigation.addEventListener("mouseleave", debounced(() => tocHovered = false));
+    scrollableNavigation.addEventListener(
+        'mouseenter',
+        debounced(() => (tocHovered = true))
+    );
+    scrollableNavigation.addEventListener(
+        'mouseleave',
+        debounced(() => (tocHovered = false))
+    );
 
     let activeSectionLink: Element;
 
@@ -95,17 +105,16 @@ function setupScrollspy() {
         // Find the link for the active section. Once again, there are a few edge cases:
         // - No active section = no link => undefined
         // - No active section but the link does not exist in toc (e.g. because it is outside of the applicable ToC levels) => undefined
-        let newActiveSectionLink: HTMLElement | undefined
+        let newActiveSectionLink: HTMLElement | undefined;
         if (newActiveSection) {
             newActiveSectionLink = idToNavigationElement[newActiveSection.id];
         }
 
         if (newActiveSection && !newActiveSectionLink) {
             // The active section does not have a link in the ToC, so we can't scroll to it.
-            console.debug("No link found for section", newActiveSection);
+            console.debug('No link found for section', newActiveSection);
         } else if (newActiveSectionLink !== activeSectionLink) {
-            if (activeSectionLink)
-                activeSectionLink.classList.remove(activeClass);
+            if (activeSectionLink) activeSectionLink.classList.remove(activeClass);
             if (newActiveSectionLink) {
                 newActiveSectionLink.classList.add(activeClass);
                 if (!tocHovered) {
@@ -117,15 +126,27 @@ function setupScrollspy() {
         }
     }
 
-    window.addEventListener("scroll", debounced(scrollHandler));
-    
     // Resizing may cause the offset values to change: recompute them.
     function resizeHandler() {
         sectionsOffsets = computeOffsets(headers);
         scrollHandler();
     }
 
-    window.addEventListener("resize", debounced(resizeHandler));
+    const scrollEvent = debounced(scrollHandler);
+    const resizeObserver = new ResizeObserver(debounced(resizeHandler));
+
+    window.addEventListener('scroll', scrollEvent);
+    resizeObserver.observe(document.body);
+
+    // Cleanup.
+    function cleanup() {
+        document.removeEventListener('swup:contentReplaced', cleanup);
+        window.removeEventListener('scroll', scrollEvent);
+        resizeObserver.disconnect();
+    }
+    document.addEventListener('swup:contentReplaced', cleanup);
+
+    scrollHandler();
 }
 
 export { setupScrollspy };
