@@ -6,21 +6,28 @@
 <script src="https://unpkg.com/@swup/progress-plugin@2/dist/index.umd.js"></script>
 <script src="https://unpkg.com/@swup/scroll-plugin@2/dist/index.umd.js"></script>
 <script src="https://unpkg.com/@swup/scripts-plugin@1/dist/SwupScriptsPlugin.min.js"></script>
+<script src="https://unpkg.com/@swup/gtm-plugin@1/dist/SwupGtmPlugin.min.js"></script>
 <script>
+    const plugins = [
+        new SwupBodyClassPlugin(),
+        new SwupFormsPlugin({
+            formSelector: 'form.search-form.widget',
+        }),
+        new SwupHeadPlugin({ persistTags: 'link[data-keep]' }),
+        new SwupPreloadPlugin(),
+        new SwupProgressPlugin({ delay: 200, hideImmediately: false }),
+        new SwupScrollPlugin({
+            animateScroll: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        }),
+        new SwupScriptsPlugin({ optin: true }),
+    ];
+
+    if (window.gtag) {
+        plugins.push(new SwupGtmPlugin());
+    }
+
     const swup = new Swup({
         containers: ['.container.main-container'],
-        plugins: [
-            new SwupBodyClassPlugin(),
-            new SwupFormsPlugin({
-                formSelector: 'form.search-form',
-            }),
-            new SwupHeadPlugin({ persistTags: 'link[data-keep]' }),
-            new SwupPreloadPlugin(),
-            new SwupProgressPlugin({ delay: 200, hideImmediately: false }),
-            new SwupScrollPlugin({
-                animateScroll: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-            }),
-            new SwupScriptsPlugin({ optin: true }),
-        ],
+        plugins,
     });
 </script>

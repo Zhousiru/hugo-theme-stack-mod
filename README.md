@@ -15,6 +15,7 @@ Just a modded Stack theme.
   - 添加了对外链图片的 PhotoSwipe 支持
   - 图片的 `alt` 作为 PhotoSwipe Caption
   - 仍 WIP，目前勉强能用
+- 修复了搜索页面回车提交导致 history 重复的问题
 
 ## Preview
 

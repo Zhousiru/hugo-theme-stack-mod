@@ -249,6 +249,9 @@ class Search {
 
         this.input.addEventListener('input', eventHandler);
         this.input.addEventListener('compositionend', eventHandler);
+        this.form.onsubmit = () => {
+            return false;
+        };
     }
 
     private clear() {
@@ -269,6 +272,32 @@ class Search {
     }
 
     private static updateQueryString(keywords: string, replaceState = false) {
+        // Swup Helpers
+        const getCurrentUrl = ({ hash }: { hash?: boolean } = {}): string => {
+            return location.pathname + location.search + (hash ? location.hash : '');
+        };
+        const createHistoryRecord = (url: string, customData: Record<string, unknown> = {}): void => {
+            url = url || getCurrentUrl({ hash: true });
+            const data = {
+                url,
+                random: Math.random(),
+                source: 'swup',
+                ...customData,
+            };
+            history.pushState(data, '', url);
+        };
+        const updateHistoryRecord = (url: string | null = null, customData: Record<string, unknown> = {}): void => {
+            url = url || getCurrentUrl({ hash: true });
+            const data = {
+                ...history.state,
+                url,
+                random: Math.random(),
+                source: 'swup',
+                ...customData,
+            };
+            history.replaceState(data, '', url);
+        };
+
         const pageURL = new URL(window.location.toString());
 
         if (keywords === '') {
@@ -278,9 +307,9 @@ class Search {
         }
 
         if (replaceState) {
-            window.history.replaceState('', '', pageURL.toString());
+            updateHistoryRecord(pageURL.toString());
         } else {
-            window.history.pushState('', '', pageURL.toString());
+            createHistoryRecord(pageURL.toString());
         }
     }
 
