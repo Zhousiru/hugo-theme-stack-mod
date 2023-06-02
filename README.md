@@ -11,6 +11,7 @@ Just a modded Stack theme.
 - 给文章页标题加上了站点标题
 - 当右栏过长时，可以滚动
 - 添加了 PJAX
+  - 大概适配了 giscus，但是重复加载的问题因为 giscus 没有提供相关的重载 API，所以暂时没有好的解决方案
 - 更新 PhotoSwipe 到 v5.3.6，顺便修复了进入文章页面 PhotoSwipe 一闪而过的问题
   - 添加了对外链图片的 PhotoSwipe 支持
   - 图片的 `alt` 作为 PhotoSwipe Caption
