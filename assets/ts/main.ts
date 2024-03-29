@@ -22,7 +22,7 @@ let Stack = {
         const articleContent = document.querySelector('.article-content') as HTMLElement;
         if (articleContent) {
             const setupLightbox = () => {
-                const lightbox = new PhotoSwipeLightbox({
+                window.lightbox = new PhotoSwipeLightbox({
                     gallery: articleContent,
                     children: 'img',
 
@@ -138,7 +138,19 @@ const loadStack = () =>
 
 window.addEventListener('load', () => {
     loadStack();
-    document.addEventListener('swup:pageView', loadStack);
+});
+
+document.addEventListener('swup:page:view', () => {
+    loadStack();
+});
+
+// Close lightbox when page changed.
+document.addEventListener('swup:content:replace', () => {
+    if (window.lightbox?.pswp) {
+        const pswpContainer = document.querySelector('.pswp.pswp--open') as HTMLDivElement;
+        pswpContainer && (pswpContainer.style.display = 'none');
+        window.lightbox.pswp.close();
+    }
 });
 
 declare global {

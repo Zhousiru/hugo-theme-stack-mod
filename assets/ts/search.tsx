@@ -361,7 +361,7 @@ const loadSearch = () =>
 
 window.addEventListener('load', () => {
     loadSearch();
-    document.addEventListener('swup:contentReplaced', loadSearch);
+    document.addEventListener('swup:content:replace', loadSearch);
 });
 
 export default Search;

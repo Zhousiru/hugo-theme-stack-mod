@@ -140,11 +140,11 @@ function setupScrollspy() {
 
     // Cleanup.
     function cleanup() {
-        document.removeEventListener('swup:contentReplaced', cleanup);
+        document.removeEventListener('swup:content:replace', cleanup);
         window.removeEventListener('scroll', scrollEvent);
         resizeObserver.disconnect();
     }
-    document.addEventListener('swup:contentReplaced', cleanup);
+    document.addEventListener('swup:content:replace', cleanup);
 
     scrollHandler();
 }
